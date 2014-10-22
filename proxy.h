@@ -18,12 +18,14 @@ class Client{
         int clientfd;
         struct sockaddr_in client_address;
         string url;
+        int out_fd;
         unsigned clength;
         
         void sendDataFromCache();
         Client(){
             clength = sizeof(struct sockaddr_in);
             initializeAddress(&client_address);
+            out_fd = -1;
         };
         ~Client(){
         		close(clientfd);

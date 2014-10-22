@@ -19,7 +19,7 @@ bool fileExist(string file) {
 	}
 }
 
-void createHttpConnectionAndSendReq(string url) {
+int createHttpConnectionAndSendReq(string url) {
 	int httpfd;
 	string host_name = getHostFromURL(url);
 	string resource = getResourceFromUrl(url);
@@ -51,13 +51,30 @@ cout<<IP<<endl;
 		cout << strerror(errno) << endl;
 		exit(1);
 	}
+	cout<< "http socket is "<< httpfd<<endl;
 	string message = generateHttp1_0Header(url);
 	cout<<message<<endl;
 	if ((send(httpfd, message.c_str(), message.length(), 0)) < 0) {
 		cout << "ERROR SENDING" << endl;
 	}
 	FD_SET(httpfd, &fds_all);
+	for(int i = 0;i<FD_SETSIZE;i++){
+			if(FD_ISSET(i, &fds_all))
+			cout<<"I: "<<i<<endl;
+		}
 	cout<<"sent request to web server"<<endl;
+	return httpfd;
+}
+
+string getUrlFromOutFD(int fd){
+	for (std::vector<Client*>::iterator it = clients.begin();
+			it != clients.end(); ++it) {
+		if ((*it)->out_fd == fd) {
+			//isClient = true;
+			return (*it)->url;
+			break;
+		}
+}
 }
 
 void recvAndProcessServer(int fd) {
@@ -67,6 +84,7 @@ void recvAndProcessServer(int fd) {
 	int rec = 0;
 	Client* c = new Client();
 	bool isClient = false;
+	cout<<"recv from : "<<fd<<endl;
 	for (std::vector<Client*>::iterator it = clients.begin();
 			it != clients.end(); ++it) {
 		if ((*it)->clientfd == fd) {
@@ -79,7 +97,9 @@ void recvAndProcessServer(int fd) {
 		do {
 			if ((rec = recv(fd, message, sizeof(message), 0)) < 0) {
 				cout << "error receiving...closing client connection" << endl;
+				FD_CLR(fd, &fds_all);
 				close(fd);
+				break;
 			}
 
 			if (rec == 0) {
@@ -87,13 +107,17 @@ void recvAndProcessServer(int fd) {
 				c->~Client();
 //		handle vector delete
 				//exit(1);
+				FD_CLR(fd, &fds_all);
+				close(fd);
+				break;
 			}
 			
 			recv_header = recv_header + string(message);
 
 
 		} while (strcmp(message + rec - 4, "\r\n\r\n")); //check last 4 bytes is \r\n\r\n
-		
+cout<<recv_header.length()<<endl;
+		if(recv_header.length() != 0){
 		string url = UrlFromHeader(recv_header);
 		if (url == "ILLEGALILLEGAL") {
 			cout << "Bad GET header" << endl;
@@ -110,8 +134,9 @@ void recvAndProcessServer(int fd) {
 			//transfer File
 		} else {
 			//send http request
-			createHttpConnectionAndSendReq(c->url);
-		}
+			c->out_fd = createHttpConnectionAndSendReq(c->url);
+
+		}}
 	} else {
 		//recv from http server and save to file
 		cout<<"recv from http server and save to file"<<endl;
@@ -120,13 +145,14 @@ void recvAndProcessServer(int fd) {
 				cout << "error receiving...closing web connection" << endl;
 				FD_CLR(fd, &fds_all);
 				close(fd);
+				break;
 			}
 
 			if (rec == 0) {
 				cout << "web disconnected" << endl;
 				FD_CLR(fd, &fds_all);
 				close(fd);
-				//exit(1);
+				//exit(1);	
 			}
 			
 			
@@ -135,7 +161,9 @@ void recvAndProcessServer(int fd) {
 
 		} while (strcmp(message + rec - 4, "\r\n\r\n") != 0); //check last 4 bytes is \r\n\r\n
 		
-		string url = UrlFromHeader(recv_header);
+		//string url = UrlFromHeader(recv_header);
+		
+		string url = getUrlFromOutFD(fd);
 		
 		ofstream writeFile;
 	    writeFile.open(url.c_str());
@@ -173,7 +201,7 @@ int main(int argc, char const *argv[]) {
 	unsigned int port;
 	const char* server;
 
-	fd_set fds_all, fds_read;
+	//fd_set fds_all, fds_read;
 
 	if (argc != 3) {
 		cout << "Usage './proxy PROXY_SERVER_IP PROXY_SERVER_PORT" << endl;
@@ -224,6 +252,11 @@ int main(int argc, char const *argv[]) {
 	while (1) {
 
 		fds_read = fds_all;
+		for(int i = 0;i<FD_SETSIZE;i++){
+			if(FD_ISSET(i, &fds_all))
+			cout<<i<<endl;
+		}
+		
 		int fd_count = select(FD_SETSIZE, &fds_read, NULL, NULL, NULL);
 		if (fd_count == -1) {
 			cout << "Error in select call" << endl;
