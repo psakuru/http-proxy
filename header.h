@@ -19,7 +19,8 @@
 #include <sstream>
 #include <vector>
 #include <fstream>
-#include<netdb.h>
+#include <netdb.h>
+#include <assert.h>
 
 #define BUFFER_SIZE 2048
 

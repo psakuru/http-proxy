@@ -66,7 +66,7 @@ string decodeHostNameHttp1_0(string recv_header){
 			host_name = host_name.substr(0,host_name.find("\r\n"));
 			return host_name;
 		} else{
-			cout<<"illegal Header";
+			//cout<<"illegal Header";
 			return "ILLEGAL";
 		}
 		
@@ -80,14 +80,14 @@ string decodeResourceHttp1_0(string recv_header){
 			resource_name = resource_name.substr(0,resource_name.find(" HTTP/1.0\r\n"));
 			return resource_name;
 		} else{
-			cout<<"illegal Header";
+			//cout<<"illegal Header";
 			return "ILLEGAL";
 		}
 }
 
 
 string UrlFromHeader(string recv_header){
-		string url = decodeHostNameHttp1_0(recv_header)+decodeResourceHttp1_0(recv_header);
+		string url = decodeHostNameHttp1_0(recv_header)+string("/")+decodeResourceHttp1_0(recv_header);
 		return url;
 }
 
@@ -96,7 +96,18 @@ int getIpFromHost(string host_name,char* ip){
 		struct hostent *he;
     struct in_addr **addr_list;
     int i;
-         
+    int occurrences = 0;
+		string::size_type start = 0;
+		string dot = ".";
+while ((start = host_name.find(dot, start)) != string::npos) {
+    ++occurrences;
+    start += dot.length(); // see the note
+}     
+//cout<<"occ"<<occurrences<<endl;
+		if(occurrences == 3){
+			strcpy(ip,host_name.c_str());
+			return 1;
+		}
     if ( (he = gethostbyname( host_name.c_str() ) ) == NULL) 
     {
         // get the host info
@@ -114,4 +125,19 @@ int getIpFromHost(string host_name,char* ip){
     }
      
     return -1;
+}
+
+
+string getFileNameFromResource(string url){
+	string file_name;
+	file_name = url;
+	do{
+	size_t host_end = file_name.find("/");
+	if (host_end != string::npos) {
+		file_name = file_name.substr(host_end+1);
+	}
+	cout<<"file "<<file_name<<endl;
+	} while(file_name.find("/") != string::npos);
+	cout<<"file name: "<<endl;
+	return file_name;
 }

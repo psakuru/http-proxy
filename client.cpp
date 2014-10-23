@@ -32,28 +32,47 @@ void recvAndProcess(int fd,string url) {
 	memset(message, '\0', BUFFER_SIZE);
 
 	int rec = 0;
-
+string recv_msg = "";
+fd_set  temp_fds;
     do{
-        if ((rec = recv(fd, message, sizeof(message), 0)) < 0) {
-		cout << "error receiving" << endl;
-        exit(1);
+        if ((rec = recv(fd, message, sizeof(BUFFER_SIZE), 0)) < 0) {
+					cout << "error receiving" << endl;
+        	exit(1);
 	    }
     
         if (rec == 0) {
 		cout << "Server disconnected" << endl;
 		close(fd);
-		exit(1);
+		//exit(1);
 	    }
 	    
-	    ofstream writeFile;
-	    writeFile.open(url.c_str());
-	    writeFile<<message;
-	    cout<<message;
-	    writeFile.close();
-        
-    } while(strcmp(message+rec-4,"/r/n/r/n")!=0); //check last 4 bytes is \r\n\r\n
-
+	    recv_msg = recv_msg + string(message);
+       cout<<message; 
+       memset(message, '\0', BUFFER_SIZE);
+       FD_ZERO(&temp_fds);
+       FD_SET(fd,&temp_fds);
+    } while(rec>0); //check last 4 bytes is \r\n\r\n
+		cout<<("entering into")<<endl;
+	//	cin>>message;
+		string file_name = getResourceFromUrl(url);
+		if(file_name == "/"){
+			file_name = "index.html";
+		} else {
+			file_name = getFileNameFromResource(file_name);
+		}
+		cout<<"test"<<file_name<<endl;
 	
+		 ofstream writeFile;
+	    writeFile.open("1",ios::out);
+	  //  assert(! writeFile.fail( ));   
+	    if(writeFile.good()){
+	    writeFile<<recv_msg;
+	    writeFile.flush();}
+	    else
+	    cout<<"help "<<strerror(errno)<<endl;
+	    //cout<<recv_msg;
+	    writeFile.close();
+	exit(1);
 //	processMessage(message);
 }
 
@@ -96,6 +115,7 @@ int main(int argc, char const *argv[]) {
 
 	//recv the file from proxy server
 	recvAndProcess(csockfd,url);
+	close(csockfd);
 	//terminate connection
 	return 0;
 }

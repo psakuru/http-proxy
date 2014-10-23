@@ -2,6 +2,8 @@
 
 vector<Client*> clients;
 fd_set fds_all, fds_read;
+map<string, int> cache_map;
+map<string, int> file_map;
 
 void initializeAddress(struct sockaddr_in* sock_iadd) {
 	memset((struct sockaddr*) sock_iadd, '\0', sizeof(sock_iadd));
@@ -23,10 +25,12 @@ int createHttpConnectionAndSendReq(string url) {
 	int httpfd;
 	string host_name = getHostFromURL(url);
 	string resource = getResourceFromUrl(url);
+	cout<<host_name<<"\t"<<resource<<"\t"<<url<<endl;
 	char* IP;
 	IP = (char*) malloc(8);
 
 	int status = getIpFromHost(host_name, IP);
+	cout<<"web server "<< host_name <<" translated to IP "<<IP<<endl;
 	//cout<<status<<endl;
 	//fflush(stdout);
 	if (status == -1) {
@@ -45,7 +49,7 @@ int createHttpConnectionAndSendReq(string url) {
 	hadd.sin_family = AF_INET;
 	hadd.sin_port = htons(80);
 	hadd.sin_addr.s_addr = htonl(inet_network(IP));
-cout<<IP<<endl;
+//cout<<IP<<endl;
 	if ((connect(httpfd, (struct sockaddr*) &hadd, sizeof(hadd))) < 0) {
 		cout << "ERROR CONNECTING" << endl;
 		cout << strerror(errno) << endl;
@@ -58,10 +62,7 @@ cout<<IP<<endl;
 		cout << "ERROR SENDING" << endl;
 	}
 	FD_SET(httpfd, &fds_all);
-	for(int i = 0;i<FD_SETSIZE;i++){
-			if(FD_ISSET(i, &fds_all))
-			cout<<"I: "<<i<<endl;
-		}
+
 	cout<<"sent request to web server"<<endl;
 	return httpfd;
 }
@@ -77,11 +78,42 @@ string getUrlFromOutFD(int fd){
 }
 }
 
+bool parseMsgForExp(string recv_header){
+	size_t expirePos = -1;
+	expirePos = recv_header.find("\r\nExpires: ");
+	string exp;
+	if(expirePos != string::npos){
+		 exp = recv_header.substr(expirePos+11);
+	}
+	expirePos = exp.find("\r\n");
+	string final;
+	if(expirePos != string::npos)
+		final = exp.substr(0,expirePos);	
+	
+	//cout<<"final"<<final<<endl;
+	if(final == "-1" || final.length()==0)
+		return false;
+	else
+		return true;
+}
+
+int getClientfdFromOutfd(int fd){
+	for (std::vector<Client*>::iterator it = clients.begin();
+			it != clients.end(); ++it) {
+		if ((*it)->out_fd == fd) {
+			//isClient = true;
+			return (*it)->clientfd;
+			break;
+		}
+}
+}
+
 void recvAndProcessServer(int fd) {
 	char message[BUFFER_SIZE];
 	memset(message, '\0', BUFFER_SIZE);
 	string recv_header = "";
 	int rec = 0;
+	fd_set temp_fds;
 	Client* c = new Client();
 	bool isClient = false;
 	cout<<"recv from : "<<fd<<endl;
@@ -94,6 +126,7 @@ void recvAndProcessServer(int fd) {
 		}
 	}
 	if (isClient) {
+		cout<<"message is recv from client"<<endl;
 		do {
 			if ((rec = recv(fd, message, sizeof(message), 0)) < 0) {
 				cout << "error receiving...closing client connection" << endl;
@@ -104,7 +137,7 @@ void recvAndProcessServer(int fd) {
 
 			if (rec == 0) {
 				cout << "Client disconnected" << endl;
-				c->~Client();
+				close(c->clientfd);
 //		handle vector delete
 				//exit(1);
 				FD_CLR(fd, &fds_all);
@@ -116,12 +149,14 @@ void recvAndProcessServer(int fd) {
 
 
 		} while (strcmp(message + rec - 4, "\r\n\r\n")); //check last 4 bytes is \r\n\r\n
-cout<<recv_header.length()<<endl;
+//cout<<recv_header.length()<<endl;
 		if(recv_header.length() != 0){
 		string url = UrlFromHeader(recv_header);
+		cout<<"url requested by client "<<fd<<" is "<<url<<endl;
 		if (url == "ILLEGALILLEGAL") {
 			cout << "Bad GET header" << endl;
 			FD_CLR(c->clientfd, &fds_all);
+			close(c->clientfd);
 			c->~Client();
 			//handle vector delete
 		} else {
@@ -134,14 +169,16 @@ cout<<recv_header.length()<<endl;
 			//transfer File
 		} else {
 			//send http request
+			cout<<"Requested resource not found in cache. Connecting to web server."<<endl;
 			c->out_fd = createHttpConnectionAndSendReq(c->url);
 
 		}}
 	} else {
 		//recv from http server and save to file
-		cout<<"recv from http server and save to file"<<endl;
+		cout<<"recv from http server and save to file is exp exist"<<endl;
 		do {
-			if ((rec = recv(fd, message, sizeof(message), 0)) < 0) {
+		//cout<<"i"<<endl;
+			if ((rec = recv(fd, message, BUFFER_SIZE, 0)) < 0) {
 				cout << "error receiving...closing web connection" << endl;
 				FD_CLR(fd, &fds_all);
 				close(fd);
@@ -158,20 +195,41 @@ cout<<recv_header.length()<<endl;
 			
 	    
 			recv_header = recv_header + string(message);
+//cout<<message;
+//cout<<"\ntest compare "<<(rec<BUFFER_SIZE)<<endl;
+memset(message, '\0', BUFFER_SIZE);
 
-		} while (strcmp(message + rec - 4, "\r\n\r\n") != 0); //check last 4 bytes is \r\n\r\n
+		} while (rec>0); //check last 4 bytes is \r\n\r\n
 		
 		//string url = UrlFromHeader(recv_header);
 		
+		bool expireExists = parseMsgForExp(recv_header);
+		if(expireExists == true){
 		string url = getUrlFromOutFD(fd);
-		
+		cout<<"writing to a file"<<endl;
 		ofstream writeFile;
+		cout<<url<<endl;
 	    writeFile.open(url.c_str());
+	    //assert(! writeFile.fail( ));     
 	    writeFile<<recv_header;
-	    cout<<recv_header;
+	    writeFile.flush();
+	    //cout<<recv_header;
 	    writeFile.close();
+	    
+	    }
+	   	int client = getClientfdFromOutfd(fd);
+	   	cout<<"web server fd "<<fd<<" was connected to client fd "<<client<<endl; 
+			if ((send(client, recv_header.c_str(), recv_header.length(), 0)) < 0) {
+				cout << "ERROR SENDING" << endl;
+			}
+			FD_CLR(client, &fds_all);
+			close(client);
 	}
 }
+
+
+
+
 
 void Client::sendDataFromCache() {
 	ifstream file;
@@ -252,10 +310,7 @@ int main(int argc, char const *argv[]) {
 	while (1) {
 
 		fds_read = fds_all;
-		for(int i = 0;i<FD_SETSIZE;i++){
-			if(FD_ISSET(i, &fds_all))
-			cout<<i<<endl;
-		}
+		
 		
 		int fd_count = select(FD_SETSIZE, &fds_read, NULL, NULL, NULL);
 		if (fd_count == -1) {
@@ -281,7 +336,7 @@ int main(int argc, char const *argv[]) {
 
 				} else {
 					//handle recv from client
-					cout<<i<<endl;
+					cout<<"Select broke on FD: "<<i<<endl;
 					fflush(stdout);
 				
 					recvAndProcessServer(i);

@@ -27,9 +27,7 @@ class Client{
             initializeAddress(&client_address);
             out_fd = -1;
         };
-        ~Client(){
-        		close(clientfd);
-        };
+        ~Client();
 };
 
 
