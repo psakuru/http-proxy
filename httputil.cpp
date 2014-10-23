@@ -136,8 +136,8 @@ string getFileNameFromResource(string url){
 	if (host_end != string::npos) {
 		file_name = file_name.substr(host_end+1);
 	}
-	cout<<"file "<<file_name<<endl;
+	//cout<<"file "<<file_name<<endl;
 	} while(file_name.find("/") != string::npos);
-	cout<<"file name: "<<endl;
+//	cout<<"file name: "<<endl;
 	return file_name;
 }

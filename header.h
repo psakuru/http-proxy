@@ -5,6 +5,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 #include <string.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -23,6 +24,7 @@
 #include <assert.h>
 
 #define BUFFER_SIZE 2048
+#define CACHE_SIZE 10
 
 using namespace std;
 

@@ -41,7 +41,7 @@ fd_set  temp_fds;
 	    }
     
         if (rec == 0) {
-		cout << "Server disconnected" << endl;
+		cout << "\nServer disconnected" << endl;
 		close(fd);
 		//exit(1);
 	    }
@@ -52,24 +52,28 @@ fd_set  temp_fds;
        FD_ZERO(&temp_fds);
        FD_SET(fd,&temp_fds);
     } while(rec>0); //check last 4 bytes is \r\n\r\n
-		cout<<("entering into")<<endl;
+	//	cout<<("entering into")<<endl;
 	//	cin>>message;
+	
+		recv_msg = recv_msg.substr(recv_msg.find("\r\n\r\n")+4);
 		string file_name = getResourceFromUrl(url);
 		if(file_name == "/"){
 			file_name = "index.html";
 		} else {
 			file_name = getFileNameFromResource(file_name);
 		}
-		cout<<"test"<<file_name<<endl;
-	
+		//cout<<"test"<<file_name<<endl;
+	if(file_name.length()==0)
+		file_name = "index.html";
 		 ofstream writeFile;
-	    writeFile.open("1",ios::out);
+	    writeFile.open(file_name.c_str(),ios::out);
 	  //  assert(! writeFile.fail( ));   
 	    if(writeFile.good()){
 	    writeFile<<recv_msg;
 	    writeFile.flush();}
-	    else
-	    cout<<"help "<<strerror(errno)<<endl;
+	    else{
+	    cout<<"file write error: "<<strerror(errno)<<endl;
+	    }
 	    //cout<<recv_msg;
 	    writeFile.close();
 	exit(1);

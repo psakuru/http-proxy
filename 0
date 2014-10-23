@@ -1,0 +1,427 @@
+HTTP/1.1 200 OK
+Date: Thu, 23 Oct 2014 06:25:34 GMT
+Server: Apache/2.4.7 (Ubuntu)
+Last-Modified: Thu, 09 Oct 2014 15:22:38 GMT
+ETag: "2603-504ff00ac0b80"
+Accept-Ranges: bytes
+Content-Length: 9731
+Vary: Accept-Encoding
+Cache-Control: max-age=3600
+Expires: Thu, 23 Oct 2014 07:25:34 GMT
+Connection: close
+Content-Type: text/html
+
+<html>
+<!-- Mirrored from www.ece.tamu.edu/~reddy/ee602_14.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Oct 2014 23:11:53 GMT -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Computer Communications and Networking </title>
+</head>
+
+<body bgcolor="White" link="blue" text="black" vlink="red">
+
+<h2>Computer Communications and Networking </h2>
+
+<ol>
+
+<dl>
+<dt> Instructor: </dt>
+<dd> A.L. Narasimha Reddy, email: reddy at ece.tamu.edu, phone:845-7598</dd>
+</dl>
+
+<dl>
+<dt> Class Hours: </dt>
+<dd> Tuesdays, Thursdays 11:10 -12:25 PM</dd>
+<dt> Office hours: Wednesday 4-5PM, Thursday 1:30-2:30PM</dt>
+<dd> 333J Wisenbaker </dd>
+</dl>
+
+<dl>
+<dt> Class Room: </dt>
+<dd> ETB 1037</dd>
+</dl>
+
+<dl>
+<dt> Graduate Assistant: Nityendra Singh</dt>
+<dd> Contact: nityendrasingh@tamu.edu</dd>
+<dd> Recitation hours: Mondays 3-4PM BLOC 120, Thursday 2:30-3:30 PM ZACH 105B</dd>
+<dd> Office hours:  Monday 4:15-6:15PM, Thursday 5:15-6:15PM, WERC 111</dd>
+<dd> Class Discussion list:  Piazza.com </dd>
+
+<dl>
+<dt> Textbook: </dt>
+<dd> <a href="http://catalogs.mhhe.com/mhhe/viewProductDetails.do?isbn=007246352X">
+Communication Networks: Fundamental Concepts and Key Architectures </a> by
+Leon-Garcia and Widjaja, McGraw Hill Publishers, 2nd Edition. </dd>
+</dl>
+
+<dl>
+<dt> Additional material:</dt>
+<dd> Data Networks by Bertsekas and Gallager, Prentice Hall Publishers. </dd>
+<dd> Computer Networks: A systems Approach by Peterson and Davie, Morgan
+Kaufman Publishers, 2nd Edition </dd>
+<dd> 
+<a href="http://www.kohala.com/start/unpv12e.html">
+Socket programming example code from UNIX Network Programming by
+Stevens </a> </dd>
+<dd> <a href="http://beej.us/guide/bgnet/">
+Beej's guide to Network Programming </a> </dd>
+<dd> <a href="ee602_00/compile.txt"> Include files and compile instructions
+</a> </dd>
+</dl>
+
+<dl>
+<dt> Class Notes: </dt>
+<dd> Posted here on this web page. The notes are either developed by the 
+course instructor or derived from the original copyrighted classnotes of
+the authors of the textbooks. </dd>
+</dl>
+
+<dl>
+<dt> Grading policy:</dt>
+<dd> Homeworks 30%, Project 10%, Test1 30%, Test2 30% </dd>
+</dl>
+
+<dl>
+<dt> Projects: </dt>
+<dd> <a href="ee602_00/projects_13.txt"> Project Suggestions </a></dd>
+<dd> <a href="ee602_00/proj_guide.txt"> Project Abstract Guidelines </a> </dd>
+<dd> See <a href="ee602_00/write.txt"> Guidelines for writing project report</a>.
+</dd>
+</dl>
+
+<dl>
+<dt> Network Simulator: </dt>
+<dd> <a href="http://www.isi.edu/nsnam/ns"> ns-2 webpage.</a> </dd>
+<dd> <a href="http://www.isi.edu/nsnam/ns/tutorial/index.html"> ns-2 tutorial </a> </dd>
+<dd> <a href="ee602_00/ns_2.1b8_install.sh"> ns-2 installation script </a> </dd>
+<dd> <a href="ee602_00/ns-2.28_install.sh"> New version of ns-2 installation script </a> </dd>
+</dl>
+
+<dl>
+<dt> If you don't have an account on ee Sun machines, please
+ fill out an account request <a href="http://unix.ece.tamu.edu/"> form </a>.
+</dt>
+</dl>
+
+</dd></dl>
+</ol>
+
+<table border="1">
+ <caption><b>Tentative Schedule -subject to change </b></caption>
+ <tbody><tr align="CENTER">
+  <th>Lecture</th>
+  <th>Date</th>
+  <th>Topic</th>
+  <th>Reading</th>
+  <th>Comments</th>
+ </tr>
+
+<tr>
+<td> 1 </td> 
+<td> Sep. 2 </td>
+<td> Intro. to Networking, Layering: OSI and TCP/IP 
+      <a href="ee602_00/lec1.pdf">pdf</a> 
+   <a href="ee602_00/lec2.pdf"> pdf </a> 
+</td>
+<td>
+      Chap. 2 
+  </td>
+<td> <a href = "http://www.ece.tamu.edu/~reddy/ee602_00/videos/lecture1.mp4"> Video1 </a> </td>
+</tr>
+
+
+<tr>
+<td> 2 </td> 
+<td> Sep. 4</td> 
+<td> Communication basics
+      <a href="ee602_00/lec3.pdf"> pdf </a> </td>
+<td> Chap. 3.1-3.7 </td>
+<td> <a href = "http://www.ece.tamu.edu/~reddy/ee602_00/videos/lecture2.mp4"> Video2 </a> </td>
+</tr>
+
+
+<tr>
+<td> 3 </td> 
+<td> Sep. 9 </td> 
+<td> <a href="ee602_00/Kiran-SocketProgramming.pdf"> Socket Programming Tutorial </a> </td>
+<td> Chap. 1, 2</td>
+<td> 
+   <a href="ee602_00/socket_tutorial.pdf"> Socket Programming Tutorial</a>, 
+   <!-- <a href = "ee602_00/ecen602_h1.pdf" >HW1 </a> Assigned -->
+   <a href = "ee602_00/hw1_2014.pdf"> HW1 </a> Assigned
+</td>
+</tr>
+
+
+<tr>
+<td> 4 </td>
+<td> Sep. 11 </td>
+<td> More on data transmission 
+      <a href="ee602_00/lec4.pdf"> pdf </a> </td>
+ 
+<td> Chap. 3.6-3.9.6 </td>
+<td> <a href = "http://www.ece.tamu.edu/~reddy/ee602_00/videos/lecture3.mp4"> Video3 </a> </td>
+</tr>
+
+<tr>
+<td> 5 </td>
+<td> Sep. 16 </td>
+<td> Stop-and-Wait ARQ, Go-Back-n 
+     <a href="ee602_00/lec5.pdf"> pdf </a> </td>
+<td> Chap. 5.1 -5.2 </td>
+<td> <a href = "http://www.ece.tamu.edu/~reddy/ee602_00/videos/lecture4.mp4"> Video4 </a> </td>
+</tr>
+
+
+<tr>
+<td> 6 </td> 
+<td> Sep. 18 </td> 
+<td> Selective Repeat, Framing, HDLC
+      <a href="ee602_00/lec6.pdf"> pdf </a> 
+   </td>
+<td> Chaps. 5.4 </td>
+<td> <a href = "http://www.ece.tamu.edu/~reddy/ee602_00/videos/lecture5.mp4"> Video5 </a> </td>
+ </tr>
+
+
+<tr>
+<td> 7 </td> 
+<td> Sep. 23 </td> 
+<td> Multiplexing
+      <a href="ee602_00/lec7.pdf"> pdf </a> </td>
+<td> 4.1-4.2.1, 4.3.1 </td>
+<td> HW1 Due. <a href = "ee602_00/hw2_2014.pdf"> HW2 </a> Assigned. </td>
+</tr>
+
+<tr>
+<td> 8 </td> 
+<td> Sep. 25 </td> 
+<td> ALOHA, Slotted ALOHA 
+      <a href="ee602_00/lec10.pdf"> pdf </a>
+   </td>
+<td> Chap. 6.1-6.3.5 </td>
+<td> <a href="ee602_00/topic-4-MAC.pdf"> pdf </a> </td>
+</tr>
+
+<tr>
+<td> 9 </td> 
+<td> Sep. 30 </td> 
+<td> CSMA, CSMA-CD, Ethernet 
+   <a href="ee602_00/lec11.pdf"> pdf </a> </td>
+<td> 6.1-6.3.5, 6.6-6.9 </td>
+<td> <a href = "http://www.ece.tamu.edu/~reddy/ee602_00/videos/lecture6.mp4"> Video6 </a> </td>
+</tr>
+
+
+<tr>
+<td> 10 </td> 
+<td> OCt. 2</td> 
+<td> Reservations, Token Ring, FDDI
+      <a href="ee602_00/lec12.pdf">, pdf </a> </td>
+<td> 6.1-6.3.5, 6.6-6.9 </td>
+<td> <a href="ee602_00/test1_01.pdf"> Example Test 1</a>
+<a href = "http://www.ece.tamu.edu/~reddy/ee602_00/videos/lecture7.mp4"> Video7 </a> </td>
+</tr>
+
+<tr>
+<td> 11 </td> 
+<td> Oct. 7</td> 
+<td> Switches, Bridges &amp; IP 
+      <a href="ee602_00/lec13.pdf"> pdf </a> </td>
+<td>  6.11 </td>
+<td>   HW2 Due. <a href = ee602_00/hw3_2014.pdf> HW3 </a> Assigned. 
+<a href = "http://www.ece.tamu.edu/~reddy/ee602_00/videos/lecture8.mp4"> Video8 </a> </td>
+</tr>
+
+<tr>
+<td> 12 </td> 
+<td> Oct. 9</td> 
+<td> IP 
+   <a href="ee602_00/lec14.pdf"> pdf </a> </td>
+<td>  8.1-8.5 </td>
+<TD> <a href = "ee602_00/test2_01.pdf"> Example Test 2</a> </TD>
+</tr>
+
+<tr>
+<td> 13 </td> 
+<td> Oct. 14</td> 
+<td> IP, UDP, TCP
+      <a href="ee602_00/lec15.pdf"> pdf </a>
+   <a href="ee602_00/lec152.pdf"> pdf2 </a> 
+   </td>
+<td> 8.5.3, 7.8.2, class notes </td>
+<td> </td>
+<td></td>
+</tr>
+
+
+<tr>
+<td> 14</td> 
+<td> Oct. 16</td> 
+<td> More on TCP
+      <a href="ee602_00/lec16.pdf"> pdf </a>
+   </td>
+<TD>
+      <a href="ee602_00/Kiran-NS-2.pdf"> NS-2 tutorial </a> 
+ </TD>
+</tr>
+
+<tr>
+<td> 15 </td> 
+<td> Oct. 21</td> 
+<td> Test 1 Review </td>
+<td> <b> Test1 7:00-9:00PM  1037 ETB </b></td>
+<td> HW3 Due. <a href = "ee602_00/hw4_2014.html"> HW4 </a> Assigned </td>
+<td> </td>
+</tr>
+
+<tr>
+<td> 16 </td> 
+<td> Oct. 23</td> 
+<td> More on TCP, Network Congestion 
+   <a href="ee602_00/lec17.pdf"> pdf </a>
+   </td>
+<td>  
+   <a href="http://www.cse.wustl.edu/~jain/papers/cong_av.htm"> paper1 </a> 
+   <a href="http://portal.acm.org/citation.cfm?id=52356&amp;dl="> paper2 </a>
+  </td>
+</tr>
+
+<tr>
+<td> 17 </td> 
+<td> Oct. 28</td> 
+<td> Switches, Network Traffic Management
+
+   <a href="ee602_00/lec18.pdf"> pdf </a> 
+   </td>
+<td> 
+      Chap 7.2, 7.3, 7.7
+   <a href="http://www.bcr.com/bcrmag/1997/12/mckeown.php"> paper4</a> 
+   </td>
+</tr>
+
+<tr>
+<td> 18 </td> 
+<td> Oct. 30</td> 
+<td> Routing
+   <a href="ee602_00/lec19.pdf"> pdf </a>
+   </td>
+<td> 
+   Chap 7.4
+  </td>
+<td> </td>
+</tr>
+
+<tr>
+<td> 19 </td> 
+<td> Nov. 4</td> 
+<td> More on Routing
+   <a href="ee602_00/lec20.pdf"> pdf </a>
+   </td>
+<td> Chap 7.4, 8.7 </td>
+<td> 
+   HW4 Due.<a href = "ee602_00/hw5_2014.html"> HW5 </a> Assigned </td>
+</tr>
+
+<tr>
+<td> 20 </td> 
+<td> Nov. 6 </td> 
+<td> DNS, HTTP and other apps. 
+   
+   <a href="ee602_00/lec21.pdf"> pdf </a> 
+<td> </td>
+<td> Project Abstracts Due </td>
+</tr>
+
+<tr>
+<td> 21 </td> 
+<td> Nov. 11 </td> 
+<td> DNS, HTTP, SMTP </td>
+<td> </td>
+<td> </td>
+</tr>
+
+<tr>
+<td> 22 </td> 
+<td> Nov. 13 </td> 
+<td> M/M/1 
+      <a href="ee602_00/lec8.pdf"> pdf </a> 
+   More Queuing 
+   <!-- Lecture 24 Notes
+   <a href="http://www.ece.tamu.edu/%7Ereddy/ee602_00/lec9.ppt"> ppt </a>
+   <a href="http://www.ece.tamu.edu/%7Ereddy/ee602_00/lec9.pdf"> pdf </a> 
+   -->
+</td> 
+<td> 5.5, Appendix A, Class Notes </td>
+<td></td>
+</tr>
+
+<tr>
+<td> 23 </td> 
+<td> Nov. 18 </td> 
+<td> More on Queuing Theory 
+      <a href="ee602_00/lec9.pdf"> pdf </a> 
+   </td>
+<td> Appendix A, Class notes </td>
+<td> 
+   HW5 Due. <a href = "ee602_00/hw6_2014.html"> HW6 </a> Assigned </td>
+</tr>
+
+<tr>
+<td> 24 </td> 
+<td> Nov. 20 </td> 
+<td>  ATM Networks and QOS
+      <a href="ee602_00/lec22.pdf"> pdf1 </a> 
+   <a href="ee602_00/lec23.pdf"> pdf2 </a> 
+   </td>
+<td>  7.6, 9.1-9.4, Class notes  </td>
+<TD> </TD>
+</tr>
+
+<tr>
+<td> 25 </td> 
+<td> Nov. 25</td> 
+<td> More on QOS </td>
+<td> </td>
+<td></td>
+</tr>
+
+<tr>
+<td> 28 </td> 
+<td> Nov. 27 </td> 
+<td> No Class </td>
+<td> Thaksgiving Break </td>
+<td> </td>
+</tr>
+
+<tr>
+<td> 26 </td>
+<td> Dec. 2 </td>
+<td> Network Security <a href = "ee602_00/lec_sec1.pdf"> pdf </a> </td>
+<td> </td>
+<td> HW6 Due </td>
+</tr>
+
+
+<tr>
+<td> 29 </td> 
+<td> Dec. 4 </td> 
+<td> Test 2 Review </td>
+<td> <b> Test2 7:00-9:00PM 1020 ETB</b> </td>
+<td> </td>
+</tr>
+
+<tr>
+<td> 30 </td> 
+<td> Dec. 9 </td> 
+<td> Project Report Due </td>
+<td> </td>
+<td> </td>
+</tr>
+
+</tbody></table>
+
+</body>
+<!-- Mirrored from www.ece.tamu.edu/~reddy/ee602_14.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Oct 2014 23:17:22 GMT -->
+</html>
