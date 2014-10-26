@@ -22,6 +22,7 @@
 #include <fstream>
 #include <netdb.h>
 #include <assert.h>
+#include <time.h>
 
 #define BUFFER_SIZE 2048000
 #define CACHE_SIZE 10

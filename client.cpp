@@ -70,13 +70,22 @@ fd_set  temp_fds;
 			file_name = getFileNameFromResource(file_name);
 		}
 		//cout<<"test"<<file_name<<endl;
+			    for(vector<Data_block*>::iterator it = recvd.begin();it != recvd.end();it++)  {
+			    		char* p = strstr((*it)->message,"\r\n\r\n");
+			    		if(p!= NULL){
+									memcpy((*it)->message,p+4,((*it)->size)-(p+4-(*it)->message));
+									(*it)->size = ((*it)->size)-(p+4-(*it)->message);
+									memset((*it)->message+((*it)->size),'\0',BUFFER_SIZE-((*it)->size));
+			    		}
+			    }
+		
 	if(file_name.length()==0)
 		file_name = "index.html";
 		 ofstream writeFile;
-	    writeFile.open(file_name.c_str(),ios::out|ios::app|ios::binary);
+	    writeFile.open(file_name.c_str(),ios::out|ios::binary);
 	  //  assert(! writeFile.fail( ));   
 	    if(writeFile.good()){
-	    for(vector<Data_block*>::iterator it = recvd.begin();it != recvd.end();it++)   
+	    for(vector<Data_block*>::iterator it = recvd.begin();it != recvd.end();++it)   
 				writeFile.write((*it)->message,(*it)->size);
 	    writeFile.flush();}
 	    else{

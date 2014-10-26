@@ -12,4 +12,5 @@ string UrlFromHeader(string recv_header);
 int getIpFromHost(string host_name, char* ip);
 string getFileNameFromResource(string resource);
 
+
 #endif

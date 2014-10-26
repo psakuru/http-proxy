@@ -35,4 +35,10 @@ typedef struct data_block {
 	int size;
 } Data_block;
 
+
+typedef struct expire_st{
+	int file_number;
+	time_t exp_time;
+	string exp_time_instr;
+} expire_st;
 #endif /* PROXY_H_ */

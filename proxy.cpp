@@ -4,6 +4,7 @@ vector<Client*> clients;
 fd_set fds_all, fds_read;
 map<string, int> cache_map;
 map<string, int> file_map;
+map<int, time_t> expire_map;
 int cache_count = -1;
 int cache_rank = 0;
 
@@ -87,7 +88,25 @@ string getUrlFromOutFD(int fd) {
 		}
 	}
 }
-
+time_t parseExpdate(string recv_header){
+	size_t expirePos = -1;
+	expirePos = recv_header.find("\r\nExpires: ");
+	string exp="";
+	if (expirePos != string::npos) {
+		exp = recv_header.substr(expirePos + 11);
+	}
+	expirePos = exp.find("\r\n");
+	string final1 = "";
+	if (expirePos != string::npos)
+		final1 = exp.substr(0, expirePos);
+	time_t rawtime;
+  struct tm timeinfo={0};
+//  Thu, 23 Oct 2014 07:25:34 GMT
+cout<<final1<<endl;
+  strptime (final1.c_str(),"%a, %d %b %Y %H:%M:%S %Z",&timeinfo);	
+  rawtime = mktime(&timeinfo);
+	return time(0);
+}
 bool parseMsgForExp(string recv_header) {
 	size_t expirePos = -1;
 	expirePos = recv_header.find("\r\nExpires: ");
@@ -164,6 +183,14 @@ string findLastRankedUrl(){
 	}
 }
 
+void convertToChar(char* buf,time_t time){
+	struct tm * timeinfo;
+	timeinfo = localtime (&time);
+//	strftime (buf,30,"%a, %d %b %Y %H:%M:%S %Z",timeinfo);
+	//puts(buf);
+	
+}
+
 void recvAndProcessServer(int fd) {
 	char message[BUFFER_SIZE];
 	memset(message, '\0', BUFFER_SIZE);
@@ -230,6 +257,18 @@ void recvAndProcessServer(int fd) {
 			//}
 				if (file_exist) {
 				cout<<"file found in cache and using it to respond to client"<<endl;
+				//check expire map and then if..else
+				time_t cacheExpire = expire_map.find(getLocalFileFromUrl(url))->second;
+				time_t now = time(0);
+				if(now > cacheExpire){
+					//send cond get and handle
+					
+					convertToChar(buf,cacheExpire);
+					int sfd = sendCondGET(buf);
+					
+					//cout<<cquery<<endl;
+				} 
+				//-------------------------------------//
 					setCacheRank(url);
 				//	cout<<"stage 1"<<endl;
 					//transfer File
@@ -237,17 +276,25 @@ void recvAndProcessServer(int fd) {
 					//cout<<"stage 2 "<< file<<endl;
 					string toSendMessage = "";
 					cachedFile.open(file.c_str(), ios::binary | ios::in);
-					char p;
-					while (cachedFile.read(&p, 1)) {
-						toSendMessage.push_back(p);
-						//cout<<string(message)<<endl;
-						memset(&p, '\0', sizeof(char));
-					}
-					cachedFile.close();
-					if ((send(fd, toSendMessage.c_str(),
-							toSendMessage.length(), 0)) < 0) {
+					//Data_block* db = new Data_block;
+					//vector<Data_block*> cache_send;
+					
+					
+					cachedFile.seekg (0, cachedFile.end);
+			    int length = cachedFile.tellg();
+			    char* p;
+			    p = (char*) malloc(length);
+			    memset(p,'\0',length);
+					while (cachedFile.read(p, length)) {
+						//toSendMessage.push_back(p);
+						//cout<<string(message)<<endl;	
+						if ((send(fd, p,
+							length, 0)) < 0) {
 						cout << "ERROR SENDING" << endl;
-					}
+						//memset(&p, '\0', BUFFER_SIZE);
+					}}
+					cachedFile.close();
+					
 					FD_CLR(fd, &fds_all);
 					close(fd);
 				}else {
@@ -266,7 +313,7 @@ void recvAndProcessServer(int fd) {
 		cout << "recv from http server and save to file if exp exist" << endl;
 		
 		do {
-			cout<<"i"<<endl;
+			//cout<<"i"<<endl;
 			Data_block* d1 = new Data_block;
 			if ((rec = recv(fd, message, BUFFER_SIZE, 0)) < 0) {
 				cout << "error receiving...closing web connection" << endl;
@@ -284,18 +331,23 @@ void recvAndProcessServer(int fd) {
 			memcpy(d1->message, message, rec);
 			d1->size = rec;
 			recvd.push_back(d1);
-			cout<<"message";
+			//cout<<"message";
 			recv_header = recv_header + string(message);
 //cout<<message;
 //cout<<"\ntest compare "<<(rec<BUFFER_SIZE)<<endl;
-			//memset(message, '\0', BUFFER_SIZE);
+			memset(message, '\0', BUFFER_SIZE);
 			//memset(d1,'\0',sizeof(Data_block));
 		} while (rec >= 0); //check last 4 bytes is \r\n\r\n
 
 		//string url = UrlFromHeader(recv_header);
-
+		
 		bool expireExists = parseMsgForExp(recv_header);
+		
 		if (expireExists == true) {
+	time_t expireDate = parseExpdate(recv_header);
+		time_t now = time(0);
+		if(expireDate > now){
+
 			string url = getUrlFromOutFD(fd);
 			cout << "writing to a file" << endl;
 			//check cache_count
@@ -310,7 +362,8 @@ void recvAndProcessServer(int fd) {
 				//entry to file_map
 				ofstream writeFile;
 			  cout << url << endl;
-			  writeFile.open(to_string(cache_count).c_str(),ios::app|ios::binary|ios::out);
+			  			expire_map[cache_count] = expireDate;
+			  writeFile.open(to_string(cache_count).c_str(),ios::binary|ios::out);
 				//assert(! writeFile.fail( ));  
 				for(vector<Data_block*>::iterator it = recvd.begin();it != recvd.end();it++)   
 				writeFile.write((*it)->message,(*it)->size);
@@ -331,9 +384,10 @@ void recvAndProcessServer(int fd) {
 				
 				ofstream writeFile;
 				cout << url << endl;
-				writeFile.open(to_string(file_n1).c_str(),ios::app|ios::binary|ios::out);
+				expire_map[file_n1] = expireDate;
+				writeFile.open(to_string(file_n1).c_str(),ios::binary|ios::out);
 				//assert(! writeFile.fail( ));  
-				for(vector<Data_block*>::iterator it = recvd.begin();it != recvd.end();it++)      
+				for(vector<Data_block*>::iterator it = recvd.begin();it != recvd.end();++it)      
 			writeFile.write((*it)->message,(*it)->size);
 				writeFile.flush();
 				//cout<<recv_header;
@@ -348,11 +402,12 @@ void recvAndProcessServer(int fd) {
 			
 			
 
+	}
 		}
 		int client = getClientfdFromOutfd(fd);
 		cout << "web server fd " << fd << " was connected to client fd "
 				<< client << endl;
-					for(vector<Data_block*>::iterator it = recvd.begin();it != recvd.end();it++)   
+					for(vector<Data_block*>::iterator it = recvd.begin();it != recvd.end();++it)   
 		if ((send(client, (*it)->message, (*it)->size, 0)) < 0) {
 			cout << "ERROR SENDING" << endl;
 		}
