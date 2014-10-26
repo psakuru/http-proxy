@@ -23,7 +23,7 @@
 #include <netdb.h>
 #include <assert.h>
 
-#define BUFFER_SIZE 2048
+#define BUFFER_SIZE 2048000
 #define CACHE_SIZE 10
 
 using namespace std;

@@ -30,6 +30,9 @@ class Client{
         ~Client();
 };
 
-
+typedef struct data_block {
+	char message[BUFFER_SIZE];
+	int size;
+} Data_block;
 
 #endif /* PROXY_H_ */

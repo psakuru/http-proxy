@@ -167,6 +167,9 @@ string findLastRankedUrl(){
 void recvAndProcessServer(int fd) {
 	char message[BUFFER_SIZE];
 	memset(message, '\0', BUFFER_SIZE);
+	vector<Data_block*> recvd;
+	
+	//memset(d1,'\0',sizeof(Data_block));
 	string recv_header = "";
 	int rec = 0;
 	fd_set temp_fds;
@@ -261,8 +264,10 @@ void recvAndProcessServer(int fd) {
 	} else {
 		//recv from http server and save to file
 		cout << "recv from http server and save to file if exp exist" << endl;
+		
 		do {
-			//cout<<"i"<<endl;
+			cout<<"i"<<endl;
+			Data_block* d1 = new Data_block;
 			if ((rec = recv(fd, message, BUFFER_SIZE, 0)) < 0) {
 				cout << "error receiving...closing web connection" << endl;
 				FD_CLR(fd, &fds_all);
@@ -276,12 +281,15 @@ void recvAndProcessServer(int fd) {
 				close(fd);
 				//exit(1);	
 			}
-
+			memcpy(d1->message, message, rec);
+			d1->size = rec;
+			recvd.push_back(d1);
+			cout<<"message";
 			recv_header = recv_header + string(message);
 //cout<<message;
 //cout<<"\ntest compare "<<(rec<BUFFER_SIZE)<<endl;
-			memset(message, '\0', BUFFER_SIZE);
-
+			//memset(message, '\0', BUFFER_SIZE);
+			//memset(d1,'\0',sizeof(Data_block));
 		} while (rec >= 0); //check last 4 bytes is \r\n\r\n
 
 		//string url = UrlFromHeader(recv_header);
@@ -302,9 +310,10 @@ void recvAndProcessServer(int fd) {
 				//entry to file_map
 				ofstream writeFile;
 			  cout << url << endl;
-			  writeFile.open(to_string(cache_count).c_str());
-				//assert(! writeFile.fail( ));     
-				writeFile << recv_header;
+			  writeFile.open(to_string(cache_count).c_str(),ios::app|ios::binary|ios::out);
+				//assert(! writeFile.fail( ));  
+				for(vector<Data_block*>::iterator it = recvd.begin();it != recvd.end();it++)   
+				writeFile.write((*it)->message,(*it)->size);
 				writeFile.flush();
 				//cout<<recv_header;
 				writeFile.close();
@@ -322,9 +331,10 @@ void recvAndProcessServer(int fd) {
 				
 				ofstream writeFile;
 				cout << url << endl;
-				writeFile.open(to_string(file_n1).c_str());
-				//assert(! writeFile.fail( ));     
-				writeFile << recv_header;
+				writeFile.open(to_string(file_n1).c_str(),ios::app|ios::binary|ios::out);
+				//assert(! writeFile.fail( ));  
+				for(vector<Data_block*>::iterator it = recvd.begin();it != recvd.end();it++)      
+			writeFile.write((*it)->message,(*it)->size);
 				writeFile.flush();
 				//cout<<recv_header;
 				writeFile.close();
@@ -342,7 +352,8 @@ void recvAndProcessServer(int fd) {
 		int client = getClientfdFromOutfd(fd);
 		cout << "web server fd " << fd << " was connected to client fd "
 				<< client << endl;
-		if ((send(client, recv_header.c_str(), recv_header.length(), 0)) < 0) {
+					for(vector<Data_block*>::iterator it = recvd.begin();it != recvd.end();it++)   
+		if ((send(client, (*it)->message, (*it)->size, 0)) < 0) {
 			cout << "ERROR SENDING" << endl;
 		}
 		FD_CLR(client, &fds_all);

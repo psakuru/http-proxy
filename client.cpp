@@ -12,6 +12,7 @@
 
 #include "header.h"
 #include "httputil.h"
+#include "client.h"
 
 void ClearAddress(struct sockaddr_in* sock_iadd) {
 	memset((struct sockaddr*) sock_iadd, '\0', sizeof(sock_iadd));
@@ -30,12 +31,15 @@ void sendGetReqToServer(int fd, string url) {
 void recvAndProcess(int fd,string url) {
 	char message[BUFFER_SIZE];
 	memset(message, '\0', BUFFER_SIZE);
-
+	vector<Data_block*> recvd;
+	
+	//memset(d1,'\0',sizeof(Data_block));
 	int rec = 0;
 string recv_msg = "";
 fd_set  temp_fds;
     do{
-        if ((rec = recv(fd, message, sizeof(BUFFER_SIZE), 0)) < 0) {
+    Data_block* d1 = new Data_block;
+        if ((rec = recv(fd, message, BUFFER_SIZE, 0)) < 0) {
 					cout << "error receiving" << endl;
         	exit(1);
 	    }
@@ -47,8 +51,11 @@ fd_set  temp_fds;
 	    }
 	    
 	    recv_msg = recv_msg + string(message);
-       cout<<message; 
-       memset(message, '\0', BUFFER_SIZE);
+       //cout<<message; 
+       memcpy(d1->message, message, rec);
+       d1->size = rec;
+       recvd.push_back(d1);
+     //  memset(d1, '\0', sizeof(Data_block));
        FD_ZERO(&temp_fds);
        FD_SET(fd,&temp_fds);
     } while(rec>0); //check last 4 bytes is \r\n\r\n
@@ -66,10 +73,11 @@ fd_set  temp_fds;
 	if(file_name.length()==0)
 		file_name = "index.html";
 		 ofstream writeFile;
-	    writeFile.open(file_name.c_str(),ios::out);
+	    writeFile.open(file_name.c_str(),ios::out|ios::app|ios::binary);
 	  //  assert(! writeFile.fail( ));   
 	    if(writeFile.good()){
-	    writeFile<<recv_msg;
+	    for(vector<Data_block*>::iterator it = recvd.begin();it != recvd.end();it++)   
+				writeFile.write((*it)->message,(*it)->size);
 	    writeFile.flush();}
 	    else{
 	    cout<<"file write error: "<<strerror(errno)<<endl;
