@@ -141,3 +141,8 @@ string getFileNameFromResource(string url){
 //	cout<<"file name: "<<endl;
 	return file_name;
 }
+
+string generateConditionalGet(string url, char* date){
+	string query2 = string("GET ")+getResourceFromUrl(url)+string(" HTTP/1.0\r\n")+string("Host: ")+getHostFromURL(url)+string("\r\n")+string("If-Modified-Since: ")+string(date)+string("\r\n")+string("\r\n");
+	return query2;
+}

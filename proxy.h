@@ -11,6 +11,9 @@
 #include "header.h"
 #include "httputil.h"
 
+#define NORMAL 0
+#define REFRESH 1
+
 void initializeAddress(struct sockaddr_in* sock_iadd);
 
 class Client{
@@ -20,14 +23,18 @@ class Client{
         string url;
         int out_fd;
         unsigned clength;
-        
+        int status;
         void sendDataFromCache();
         Client(){
             clength = sizeof(struct sockaddr_in);
             initializeAddress(&client_address);
             out_fd = -1;
+            status = NORMAL;
         };
-        ~Client();
+        ~Client(){
+            clientfd = -1;
+            out_fd = -1;
+        };
 };
 
 typedef struct data_block {

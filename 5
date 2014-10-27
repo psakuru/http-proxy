@@ -1,0 +1,111 @@
+HTTP/1.1 200 OK
+Date: Mon, 27 Oct 2014 03:46:59 GMT
+Server: Apache/2.4.7 (Ubuntu)
+Last-Modified: Sat, 18 Oct 2014 04:31:01 GMT
+ETag: "3fd9-505aaf2e9e7dd"
+Accept-Ranges: bytes
+Content-Length: 16345
+Vary: Accept-Encoding
+Cache-Control: max-age=15552000
+Expires: Sat, 25 Apr 2015 03:46:59 GMT
+Connection: close
+Content-Type: text/plain
+
+Router (computing)
+From Wikipedia, the free encyclopedia
+
+A Cisco ASM/2-32EM router deployed at CERN in 1987
+A router is a networking device, commonly specialized hardware, that forwards data packets between computer networks. This creates an overlay internetwork, as a router is connected to two or more data lines from different networks. When a data packet comes in one of the lines, the router reads the address information in the packet to determine its ultimate destination. Then, using information in its routing table or routing policy, it directs the packet to the next network on its journey. Routers perform the "traffic directing" functions on the Internet. A data packet is typically forwarded from one router to another through the networks that constitute the internetwork until it reaches its destination node.[1]
+
+The most familiar type of routers are home and small office routers that simply pass data, such as web pages, email, IM, and videos between the home computers and the Internet. An example of a router would be the owner's cable or DSL router, which connects to the Internet through an ISP. More sophisticated routers, such as enterprise routers, connect large business or ISP networks up to the powerful core routers that forward data at high speed along the optical fiber lines of the Internet backbone. Though routers are typically dedicated hardware devices, use of software-based routers has grown increasingly common.
+
+Contents  [hide] 
+1 Applications
+1.1 Access
+1.2 Distribution
+1.3 Security
+1.4 Core
+1.5 Internet connectivity and internal use
+2 Historical and technical information
+3 Forwarding
+4 See also
+5 References
+6 External links
+Applications[edit]
+When multiple routers are used in interconnected networks, the routers exchange information about destination addresses using a dynamic routing protocol. Each router builds up a table listing the preferred routes between any two systems on the interconnected networks. A router has interfaces for different physical types of network connections, such as copper cables, fibre optic, or wireless transmission. It also contains firmware for different networking communications protocol standards. Each network interface uses this specialised computer software to enable data packets to be forwarded from one protocol transmission system to another.
+
+Routers may also be used to connect two or more logical groups of computer devices known as subnets, each with a different sub-network address. The subnet addresses recorded in the router do not necessarily map directly to the physical interface connections.[2]
+
+A router has two stages of operation called planes:[3]
+
+Control plane: A router maintains a routing table that lists which route should be used to forward a data packet, and through which physical interface connection. It does this using internal pre-configured directives, called static routes, or by learning routes using a dynamic routing protocol. Static and dynamic routes are stored in the Routing Information Base (RIB). The control-plane logic then strips the RIB from non essential directives and builds a Forwarding Information Base (FIB) to be used by the forwarding-plane.
+
+A typical home or small office router showing the ADSL telephone line and Ethernet network cable connections
+Forwarding plane: The router forwards data packets between incoming and outgoing interface connections. It routes them to the correct network type using information that the packet header contains. It uses data recorded in the routing table control plane.
+Routers may provide connectivity within enterprises, between enterprises and the Internet, or between internet service providers' (ISPs) networks. The largest routers (such as the Cisco CRS-1 or Juniper T1600) interconnect the various ISPs, or may be used in large enterprise networks.[4] Smaller routers usually provide connectivity for typical home and office networks. Other networking solutions may be provided by a backbone Wireless Distribution System (WDS), which avoids the costs of introducing networking cables into buildings.
+
+All sizes of routers may be found inside enterprises.[5] The most powerful routers are usually found in ISPs, academic and research facilities. Large businesses may also need more powerful routers to cope with ever increasing demands of intranet data traffic. A three-layer model is in common use, not all of which need be present in smaller networks.[6]
+
+Access[edit]
+
+A screenshot of the LuCI web interface used by OpenWrt. This page configures Dynamic DNS.
+Access routers, including 'small office/home office' (SOHO) models, are located at customer sites such as branch offices that do not need hierarchical routing of their own. Typically, they are optimized for low cost. Some SOHO routers are capable of running alternative free Linux-based firmwares like Tomato, OpenWrt or DD-WRT.[7]
+
+Distribution[edit]
+Distribution routers aggregate traffic from multiple access routers, either at the same site, or to collect the data streams from multiple sites to a major enterprise location. Distribution routers are often responsible for enforcing quality of service across a WAN, so they may have considerable memory installed, multiple WAN interface connections, and substantial onboard data processing routines. They may also provide connectivity to groups of file servers or other external networks.
+
+Security[edit]
+External networks must be carefully considered as part of the overall security strategy. A router may include a firewall, VPN handling, and other security functions, or these may be handled by separate devices. Many companies produced security-oriented routers, including Cisco Systems' PIX and ASA5500 series, Juniper's Netscreen, Watchguard's Firebox, Barracuda's variety of mail-oriented devices, and many others. Routers also commonly perform network address translation, which allows multiple devices on a network to share a single public IP address.[8][9][10]
+
+Core[edit]
+In enterprises, a core router may provide a "collapsed backbone" interconnecting the distribution tier routers from multiple buildings of a campus, or large enterprise locations. They tend to be optimized for high bandwidth, but lack some of the features of Edge Routers.[11]
+
+Internet connectivity and internal use[edit]
+Routers intended for ISP and major enterprise connectivity usually exchange routing information using the Border Gateway Protocol (BGP). RFC 4098[12] standard defines the types of BGP routers according to their functions:
+
+Edge router: Also called a Provider Edge router, is placed at the edge of an ISP network. The router uses External BGP to EBGP routers in other ISPs, or a large enterprise Autonomous System.
+Subscriber edge router: Also called a Customer Edge router, is located at the edge of the subscriber's network, it also uses EBGP to its provider's Autonomous System. It is typically used in an (enterprise) organization.
+Inter-provider border router: Interconnecting ISPs, is a BGP router that maintains BGP sessions with other BGP routers in ISP Autonomous Systems.
+Core router: A core router resides within an Autonomous System as a back bone to carry traffic between edge routers.[13]
+Within an ISP: In the ISP's Autonomous System, a router uses internal BGP to communicate with other ISP edge routers, other intranet core routers, or the ISP's intranet provider border routers.
+"Internet backbone:" The Internet no longer has a clearly identifiable backbone, unlike its predecessor networks. See default-free zone (DFZ). The major ISPs' system routers make up what could be considered to be the current Internet backbone core.[14] ISPs operate all four types of the BGP routers described here. An ISP "core" router is used to interconnect its edge and border routers. Core routers may also have specialized functions in virtual private networks based on a combination of BGP and Multi-Protocol Label Switching protocols.[15]
+Port forwarding: Routers are also used for port forwarding between private Internet connected servers.[5]
+Voice/Data/Fax/Video Processing Routers: Commonly referred to as access servers or gateways, these devices are used to route and process voice, data, video and fax traffic on the Internet. Since 2005, most long-distance phone calls have been processed as IP traffic (VOIP) through a voice gateway. Voice traffic that the traditional cable networks once carried[clarification needed]. Use of access server type routers expanded with the advent of the Internet, first with dial-up access and another resurgence with voice phone service.
+Historical and technical information[edit]
+
+Leonard Kleinrock and the first IMP.
+
+Avaya ERS 8600 (2010)
+The very first device that had fundamentally the same functionality as a router does today, was the Interface Message Processor (IMP); IMPs were the devices that made up the ARPANET, the first packet network. The idea for a router (called "gateways" at the time) initially came about through an international group of computer networking researchers called the International Network Working Group (INWG). Set up in 1972 as an informal group to consider the technical issues involved in connecting different networks, later that year it became a subcommittee of the International Federation for Information Processing.[16]
+
+These devices were different from most previous packet networks in two ways. First, they connected dissimilar kinds of networks, such as serial lines and local area networks. Second, they were connectionless devices, which had no role in assuring that traffic was delivered reliably, leaving that entirely to the hosts (this particular idea had been previously pioneered in the CYCLADES network).
+
+The idea was explored in more detail, with the intention to produce a prototype system, as part of two contemporaneous programs. One was the initial DARPA-initiated program, which created the TCP/IP architecture in use today.[17] The other was a program at Xerox PARC to explore new networking technologies, which produced the PARC Universal Packet system; due to corporate intellectual property concerns it received little attention outside Xerox for years.[18]
+
+Some time after early 1974 the first Xerox routers became operational. The first true IP router was developed by Virginia Strazisar at BBN, as part of that DARPA-initiated effort, during 1975-1976. By the end of 1976, three PDP-11-based routers were in service in the experimental prototype Internet.[19]
+
+The first multiprotocol routers were independently created by staff researchers at MIT and Stanford in 1981; the Stanford router was done by William Yeager, and the MIT one by Noel Chiappa; both were also based on PDP-11s.[20][21][22][23]
+
+Virtually all networking now uses TCP/IP, but multiprotocol routers are still manufactured. They were important in the early stages of the growth of computer networking, when protocols other than TCP/IP were in use. Modern Internet routers that handle both IPv4 and IPv6 are multiprotocol, but are simpler devices than routers processing AppleTalk, DECnet, IP and Xerox protocols.
+
+From the mid-1970s and in the 1980s, general-purpose mini-computers served as routers. Modern high-speed routers are highly specialized computers with extra hardware added to speed both common routing functions, such as packet forwarding, and specialised functions such as IPsec encryption.
+
+There is substantial use of Linux and Unix software based machines, running open source routing code, for research and other applications. Cisco's operating system was independently designed. Major router operating systems, such as those from Juniper Networks and Extreme Networks, are extensively modified versions of Unix software.
+
+Forwarding[edit]
+Further information: routing
+
+This section needs additional citations for verification. Please help improve this article by adding citations to reliable sources. Unsourced material may be challenged and removed. (June 2014)
+For pure Internet Protocol (IP) forwarding function, a router is designed to minimize the state information associated with individual packets. The main purpose of a router is to connect multiple networks and forward packets destined either for its own networks or other networks. A router is considered a Layer 3 device because its primary forwarding decision is based on the information in the Layer 3 IP packet, specifically the destination IP address. This process is known as routing. When each router receives a packet, it searches its routing table to find the best match between the destination IP address of the packet and one of the network addresses in the routing table. Once a match is found, the packet is encapsulated in the Layer 2 data link frame for that outgoing interface. A router does not look into the actual data contents that the packet carries,[citation needed] but only at the layer 3 addresses to make a forwarding decision, plus optionally other information in the header for hints on, for example, quality of service (QoS). Once a packet is forwarded, the router does not retain any historical information about the packet, but the forwarding action can be collected into the statistical data, if so configured.
+
+The routing table itself can contain information derived from a variety of sources, such as a default or static route that is configured manually, or dynamic routing protocols where the router learns routes from other routers. A default route is one that is used to route all traffic whose destination does not otherwise appear in the routing table; this is common – even necessary – in small networks, such as a home or small business where the default route simply sends all non-local traffic to the Internet service provider. The default route can be manually configured (as a static route), or learned by dynamic routing protocols, or be obtained by DHCP.[24] (A router can serve as a DHCP client or as a DHCP server.) A router can run more than one routing protocol at a time, particularly if it serves as an autonomous system border router between parts of a network that run different routing protocols; if it does so, then redistribution may be used (usually selectively) to share information between the different protocols running on the same router.[25]
+
+Forwarding decisions can involve decisions at layers other than layer 3. A function that forwards based on layer 2 information is properly called a bridge. This function is referred to as layer 2 bridging, as the addresses it uses to forward the traffic are layer 2 addresses (e.g. MAC addresses on Ethernet).
+
+Yet another function a router performs is called policy-based routing where special rules are constructed to override the rules derived from the routing table when a packet forwarding decision is made.[26]
+
+Besides making decision as to which interface a packet is forwarded to, which is handled primarily via the routing table, a router also has to manage congestion, when packets arrive at a rate higher than the router can process. Three policies commonly used in the Internet are tail drop, random early detection (RED), and weighted random early detection (WRED). Tail drop is the simplest and most easily implemented; the router simply drops packets once the length of the queue exceeds the size of the buffers in the router. RED probabilistically drops datagrams early when the queue exceeds a pre-configured portion of the buffer, until a pre-determined max, when it becomes tail drop. WRED requires a weight on the average queue size to act upon when the traffic is about to exceed the pre-configured size, so that short bursts will not trigger random drops.
+
+Another function a router performs is to decide which packet should be processed first when multiple queues exist. This is managed through QoS, which is critical when Voice over IP is deployed, so that delays between packets do not exceed 150ms to maintain the quality of voice conversations.
+
+These functions may be performed through the same internal paths that the packets travel inside the router. Some of the functions may be performed through an application-specific integrated circuit (ASIC) to avoid overhead caused by multiple CPU cycles, and others may have to be performed through the CPU as these packets need special attention that cannot be handled by an ASIC.

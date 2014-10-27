@@ -1,0 +1,146 @@
+HTTP/1.1 200 OK
+Date: Mon, 27 Oct 2014 03:46:59 GMT
+Server: Apache/2.4.7 (Ubuntu)
+Last-Modified: Sat, 18 Oct 2014 04:30:05 GMT
+ETag: "35d6-505aaef92dd3f"
+Accept-Ranges: bytes
+Content-Length: 13782
+Vary: Accept-Encoding
+Cache-Control: max-age=15552000
+Expires: Sat, 25 Apr 2015 03:46:59 GMT
+Connection: close
+Content-Type: text/plain
+
+Token ring
+From Wikipedia, the free encyclopedia
+
+Two examples of token ring networks: a) Using a single MAU b) Using several MAUs connected to each other
+
+Token ring network
+
+IBM hermaphroditic connector with locking clip
+
+An IBM 8228 MAU
+
+Madge 4/16Mbit/s TokenRing ISA NIC
+Token ring local area network (LAN) technology is a protocol which resides at the data link layer (DLL) Initially used only in IBM computers, it was eventually standardized with protocol IEEE 802.5.
+
+The data transmission process goes as follows:
+
+The token scheme can also be used with bus topology LANs.
+
+Contents  [hide] 
+1 Description
+2 Token frame
+3 Token priority
+4 Token ring frame format
+4.1 Data/Command Frame
+4.2 Token Frame
+4.3 Abort Frame
+5 Active and standby monitors
+6 Token ring insertion process
+7 Modeling
+8 See also
+9 References
+10 External links
+Description[edit]
+Stations on a token ring LAN are logically organized in a ring topology with data being transmitted sequentially from one ring station to the next with a control token circulating around the ring controlling access. This token passing mechanism is shared by ARCNET, token bus, 100VG-AnyLAN(802.12) and FDDI, and has theoretical advantages over the stochastic CSMA/CD of Ethernet.
+
+Physically, a token ring network is wired as a star, with 'MAUs' and arms out to each station and the loop going out-and-back through each.
+
+Cabling is generally IBM "Type-1" shielded twisted pair, with unique hermaphroditic connectors, commonly referred to as IBM data connectors in formal writing or colloquially as Boy George connectors.[1] The connectors have the disadvantage of being quite bulky, requiring at least 3 x 3 cm panel space, and being relatively fragile. Connectors at the computer were usually DE-9 female.
+
+Initially (in 1985) token ring ran at 4 Mbit/s, but in 1989 IBM introduced the first 16 Mbit/s token ring products and the 802.5 standard was extended to support this. In 1981, Apollo Computer introduced their proprietary 12 Mbit/s Apollo token ring (ATR) and Proteon introduced their 10 Mbit/s ProNet-10 token ring network in 1984. However, IBM token ring was not compatible with ATR or ProNet-10.
+
+Each station passes or repeats the special token frame around the ring to its nearest downstream neighbour. This token-passing process is used to arbitrate access to the shared ring media. Stations that have data frames to transmit must first acquire the token before they can transmit them. Token ring LANs normally use differential Manchester encoding of bits on the LAN media.
+
+IBM popularized the use of token ring LANs in the mid 1980s when it released its IBM token ring architecture based on active MAUs (Media Access Unit, not to be confused with Medium Attachment Unit) and the IBM Structured Cabling System. The Institute of Electrical and Electronics Engineers (IEEE) later standardized a token ring LAN system as IEEE 802.5.[2] Although Token Ring runs on LLC, it includes Source Routing [3] to forward packets beyond the local network.
+
+Token ring LAN speeds of 4 Mbit/s and 16 Mbit/s were standardized by the IEEE 802.5 working group. An increase to 100 Mbit/s was standardized and marketed during the wane of token ring's existence while a 1000 Mbit/s speed was actually approved in 2001, but no products were ever brought to market.[4]
+
+When token ring LANs were first introduced at 4 Mbit/s, there were widely circulated claims that they were superior to Ethernet,[5] but these claims were fiercely debated.[6]
+
+With the development of switched Ethernet and faster variants of Ethernet, token ring architectures lagged behind Ethernet, and the higher sales of Ethernet allowed economies of scale which drove down prices further, and added a compelling price advantage. Token Ring MAC hardware was more complex than Ethernet, requiring a specialized processor and licensed MAC/LLC firmware for each interface. The Ethernet MAC included both the (simpler) firmware and the lower licensing cost in the MAC chip. Token Ring interface parts cost (using a Texas Instruments TMS380C16 MAC and PHY) was approximately 3x the cost of an Ethernet interface using the Intel 82586 MAC and PHY. The lower cost of unshielded twisted pair (CAT3 cable) was also significant, as the 10-BASE-T and 100-BASE-T signalling waveforms were optimized for this media, while the Token Ring waveform with its sharp edges and short risetimes caused EMI issues when used on unshielded cables.
+
+Token ring networks have since declined in usage. Standards activity has since come to a standstill as Fast Ethernet and Gigabit Ethernet have come to dominate the local area networking market.
+
+Token frame[edit]
+When no station is transmitting a data frame, a special token frame circles the loop. This special token frame is repeated from station to station until arriving at a station that needs to transmit data. When a station needs to transmit data, it converts the token frame into a data frame for transmission. Once the receiving station receives its own data frame, it converts the frame back into a token. If a transmission error occurs and no token frame, or more than one, is present, a special station referred to as the active monitor detects the problem and removes and/or reinserts tokens as necessary. On 4 Mbit/s token ring, only one token may circulate; on 16 Mbit/s token ring, there may be multiple tokens.
+
+The special token frame consists of three bytes as described below (J and K are special non-data characters, referred to as code violations).
+
+Token priority[edit]
+Token ring specifies an optional medium access scheme allowing a station with a high-priority transmission to request priority access to the token.
+
+8 priority levels, 0–7, are used. When the station wishing to transmit receives a token or data frame with a priority less than or equal to the station's requested priority, it sets the priority bits to its desired priority. The station does not immediately transmit; the token circulates around the medium until it returns to the station. Upon sending and receiving its own data frame, the station downgrades the token priority back to the original priority.
+
+Token ring frame format[edit]
+A data token ring frame is an expanded version of the token frame that is used by stations to transmit media access control (MAC) management frames or data frames from upper layer protocols and applications.
+
+Token Ring and IEEE 802.5 support two basic frame types: tokens and data/command frames. Tokens are 3 bytes in length and consist of a start delimiter, an access control byte, and an end delimiter. Data/command frames vary in size, depending on the size of the Information field. Data frames carry information for upper-layer protocols, while command frames contain control information and have no data for upper-layer protocols.
+
+Data/Command Frame[edit]
+SD	AC	FC	DA	SA	PDU from LLC (IEEE 802.2)	CRC	ED	FS
+8 bits	8 bits	8 bits	48 bits	48 bits	up to 18200x8 bits	32 bits	8 bits	8 bits
+Starting Delimiter 
+Consists of a special bit pattern denoting the beginning of the frame. The bits from most significant to least significant are J,K,0,J,K,0,0,0. J and K are code violations. Since Manchester encoding is self clocking, and has a transition for every encoded bit 0 or 1, the J and K codings violate this, and will be detected by the hardware. Both the Starting Delimiter and Ending Delimiter fields are used to mark frame boundaries.
+J	K	0	J	K	0	0	0
+1 bit	1 bit	1 bit	1 bit	1 bit	1 bit	1 bit	1 bit
+Access Control 
+This byte field consists of the following bits from most significant to least significant bit order: P,P,P,T,M,R,R,R. The P bits are priority bits, T is the token bit which when set specifies that this is a token frame, M is the monitor bit which is set by the Active Monitor (AM) station when it sees this frame, and R bits are reserved bits.
++	Bits 0–2	3	4	5–7
+0	Priority	Token	Monitor	Reservation
+Frame Control 
+A one byte field that contains bits describing the data portion of the frame contents which indicates whether the frame contains data or control information. In control frames, this byte specifies the type of control information.
++	Bits 0–1	Bits 2–7
+0	Frame type	Control Bits
+Frame type – 01 indicates LLC frame IEEE 802.2 (data) and ignore control bits; 00 indicates MAC frame and control bits indicate the type of MAC control frame
+
+Destination address 
+A six byte field used to specify the destination(s) physical address.
+Source address 
+Contains physical address of sending station . It is six byte field that is either the local assigned address (LAA) or universally assigned address (UAA) of the sending station adapter.
+Data 
+A variable length field of 0 or more bytes, the maximum allowable size depending on ring speed containing MAC management data or upper layer information. Maximum length of 4500 bytes.
+Frame Check Sequence 
+A four byte field used to store the calculation of a CRC for frame integrity verification by the receiver.
+Ending Delimiter 
+The counterpart to the starting delimiter, this field marks the end of the frame and consists of the following bits from most significant to least significant: J,K,1,J,K,1,I,E. I is the intermediate frame bit and E is the error bit.
+J	K	1	J	K	1	I	E
+1	1 bit	1 bit	1 bit	1 bit	1 bit	1 bit	1 bit
+Frame Status 
+A one byte field used as a primitive acknowledgement scheme on whether the frame was recognized and copied by its intended receiver.
+A	C	0	0	A	C	0	0
+1 bit	1 bit	1 bit	1 bit	1 bit	1 bit	1 bit	1 bit
+A = 1, Address recognized C = 1, Frame copied
+
+Token Frame[edit]
+Start Delimiter	Access Control	End Delimiter
+8 bits	8 bits	8 bits
+Abort Frame[edit]
+SD	ED
+8 bits	8 bits
+Used to abort transmission by the sending station
+
+Active and standby monitors[edit]
+Every station in a token ring network is either an active monitor (AM) or standby monitor (SM) station. However, there can be only one active monitor on a ring at a time. The active monitor is chosen through an election or monitor contention process.
+
+The monitor contention process is initiated when
+
+a loss of signal on the ring is detected.
+an active monitor station is not detected by other stations on the ring.
+a particular timer on an end station expires such as the case when a station hasn't seen a token frame in the past 7 seconds.
+When any of the above conditions take place and a station decides that a new monitor is needed, it will transmit a "claim token" frame, announcing that it wants to become the new monitor. If that token returns to the sender, it is OK for it to become the monitor. If some other station tries to become the monitor at the same time then the station with the highest MAC address will win the election process. Every other station becomes a standby monitor. All stations must be capable of becoming an active monitor station if necessary.
+
+The active monitor performs a number of ring administration functions. The first function is to operate as the master clock for the ring in order to provide synchronization of the signal for stations on the wire. Another function of the AM is to insert a 24-bit delay into the ring, to ensure that there is always sufficient buffering in the ring for the token to circulate. A third function for the AM is to ensure that exactly one token circulates whenever there is no frame being transmitted, and to detect a broken ring. Lastly, the AM is responsible for removing circulating frames from the ring.
+
+Token ring insertion process[edit]
+Token ring stations must go through a 5-phase ring insertion process before being allowed to participate in the ring network. If any of these phases fail, the token ring station will not insert into the ring and the token ring driver may report an error.
+
+Phase 0 (Lobe Check) — A station first performs a lobe media check. A station is wrapped at the MSAU and is able to send 2000 test frames down its transmit pair which will loop back to its receive pair. The station checks to ensure it can receive these frames without error.
+Phase 1 (Physical Insertion) — A station then sends a 5 volt signal to the MSAU to open the relay.
+Phase 2 (Address Verification) — A station then transmits MAC frames with its own MAC address in the destination address field of a token ring frame. When the frame returns and if the Address Recognized (AR) and Frame Copied (FC) bits in the frame-status are set to 0 (indicating that no other station currently on the ring uses that address), the station must participate in the periodic (every 7 seconds) ring poll process. This is where stations identify themselves on the network as part of the MAC management functions.
+Phase 3 (Participation in ring poll) — A station learns the address of its Nearest Active Upstream Neighbour (NAUN) and makes its address known to its nearest downstream neighbour, leading to the creation of the ring map. Station waits until it receives an AMP or SMP frame with the AR and FC bits set to 0. When it does, the station flips both bits (AR and FC) to 1, if enough resources are available, and queues an SMP frame for transmission. If no such frames are received within 18 seconds, then the station reports a failure to open and de-inserts from the ring. If the station successfully participates in a ring poll, it proceeds into the final phase of insertion, request initialization.
+Phase 4 (Request Initialization) — Finally a station sends out a special request to a parameter server to obtain configuration information. This frame is sent to a special functional address, typically a token ring bridge, which may hold timer and ring number information the new station needs to know.
+Modeling[edit]
+A token ring network can be modelled as a polling system where a single server provides service to queues in a cyclic order.[7]

@@ -61,8 +61,12 @@ fd_set  temp_fds;
     } while(rec>0); //check last 4 bytes is \r\n\r\n
 	//	cout<<("entering into")<<endl;
 	//	cin>>message;
-	
+	int position;
+	if(recv_msg.find("404")==string::npos){
+	if(recv_msg.find("\r\n\r\n")!=string::npos)
 		recv_msg = recv_msg.substr(recv_msg.find("\r\n\r\n")+4);
+	else
+		cout<<recv_msg<<endl;
 		string file_name = getResourceFromUrl(url);
 		if(file_name == "/"){
 			file_name = "index.html";
@@ -93,6 +97,9 @@ fd_set  temp_fds;
 	    }
 	    //cout<<recv_msg;
 	    writeFile.close();
+	}else{
+		cout<<"404 Not Found error"<<endl;
+	}
 	exit(1);
 //	processMessage(message);
 }

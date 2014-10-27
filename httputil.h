@@ -11,6 +11,6 @@ string decodeResourceHttp1_0(string recv_header);
 string UrlFromHeader(string recv_header);
 int getIpFromHost(string host_name, char* ip);
 string getFileNameFromResource(string resource);
-
+string generateConditionalGet(string url, char* date);
 
 #endif
